@@ -9,7 +9,7 @@ import {
   StageLog,
   StatsLog,
 } from '@pnpm/core-loggers'
-import { LOCKFILE_VERSION } from '@pnpm/constants'
+import { LOCKFILE_VERSION, WANTED_LOCKFILE } from '@pnpm/constants'
 import { pathToLocalPkg } from '@pnpm/test-fixtures'
 import { ProjectManifest } from '@pnpm/types'
 import { getIntegrity, REGISTRY_MOCK_PORT } from '@pnpm/registry-mock'
@@ -861,7 +861,7 @@ test('reinstalls missing packages to node_modules', async () => {
 
   expect(reporter.calledWithMatch(missingDepLog)).toBeFalsy()
 
-  await rimraf('pnpm-lock.yaml')
+  await rimraf(WANTED_LOCKFILE)
   await rimraf('node_modules/is-positive')
   await rimraf(depLocation)
 
@@ -944,7 +944,7 @@ test('all the subdeps of dependencies are linked when a node_modules is partiall
     },
   ], await testDefaults())
 
-  await writeYamlFile(path.resolve('pnpm-lock.yaml'), {
+  await writeYamlFile(path.resolve(WANTED_LOCKFILE), {
     dependencies: {
       foobarqar: '1.0.1',
     },
@@ -1042,7 +1042,7 @@ test('subdep symlinks are updated if the lockfile has new subdep versions specif
     ]
   )
 
-  await writeYamlFile(path.resolve('pnpm-lock.yaml'), {
+  await writeYamlFile(path.resolve(WANTED_LOCKFILE), {
     dependencies: {
       'parent-of-pkg-with-1-dep': '1.0.0',
     },
@@ -1200,7 +1200,7 @@ test('memory consumption is under control on huge package with many peer depende
     await testDefaults({ fastUnpack: true, lockfileOnly: true })
   )
 
-  expect(await exists('pnpm-lock.yaml')).toBeTruthy()
+  expect(await exists(WANTED_LOCKFILE)).toBeTruthy()
 })
 
 // Covers https://github.com/pnpm/pnpm/issues/2339
@@ -1216,7 +1216,7 @@ test('memory consumption is under control on huge package with many peer depende
     await testDefaults({ fastUnpack: true, lockfileOnly: true })
   )
 
-  expect(await exists('pnpm-lock.yaml')).toBeTruthy()
+  expect(await exists(WANTED_LOCKFILE)).toBeTruthy()
 })
 
 test('installing with no symlinks with PnP', async () => {

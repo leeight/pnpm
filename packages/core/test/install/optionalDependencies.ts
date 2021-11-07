@@ -1,6 +1,7 @@
 import path from 'path'
 import { Lockfile } from '@pnpm/lockfile-file'
 import { prepareEmpty, preparePackages } from '@pnpm/prepare'
+import { WANTED_LOCKFILE } from '@pnpm/constants'
 import { REGISTRY_MOCK_PORT } from '@pnpm/registry-mock'
 import readYamlFile from 'read-yaml-file'
 import {
@@ -293,8 +294,8 @@ test('optional subdependency is skipped', async () => {
 
   console.log('recreate the lockfile with optional dependencies present')
 
-  expect(await exists('pnpm-lock.yaml')).toBeTruthy()
-  await rimraf('pnpm-lock.yaml')
+  expect(await exists(WANTED_LOCKFILE)).toBeTruthy()
+  await rimraf(WANTED_LOCKFILE)
 
   await mutateModules(
     [

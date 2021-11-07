@@ -1,5 +1,6 @@
 import path from 'path'
 import { preparePackages } from '@pnpm/prepare'
+import { WORKSPACE_MANIFEST_FILENAME } from '@pnpm/constants'
 import { run } from '@pnpm/plugin-commands-script-runners'
 import { filterPkgsBySelectorObjects, readProjects } from '@pnpm/filter-workspace-packages'
 import PnpmError from '@pnpm/error'
@@ -759,7 +760,7 @@ test('`pnpm run -r` should avoid infinite recursion', async () => {
       },
     },
   ])
-  await writeYamlFile('pnpm-workspace.yaml', {})
+  await writeYamlFile(WORKSPACE_MANIFEST_FILENAME, {})
 
   await execa(pnpmBin, [
     'install',

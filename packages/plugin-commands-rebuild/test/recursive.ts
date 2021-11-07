@@ -3,6 +3,7 @@ import { readProjects } from '@pnpm/filter-workspace-packages'
 import { rebuild } from '@pnpm/plugin-commands-rebuild'
 import { preparePackages } from '@pnpm/prepare'
 import { PackageManifest } from '@pnpm/types'
+import { WORKSPACE_MANIFEST_FILENAME } from '@pnpm/constants'
 import execa from 'execa'
 import writeYamlFile from 'write-yaml-file'
 import { DEFAULT_OPTS, REGISTRY } from './utils'
@@ -107,7 +108,7 @@ test.skip('rebuild multiple packages in correct order', async () => {
     },
   ] as PackageManifest[]
   preparePackages(pkgs)
-  await writeYamlFile('pnpm-workspace.yaml', { packages: ['project-1'] })
+  await writeYamlFile(WORKSPACE_MANIFEST_FILENAME, { packages: ['project-1'] })
 
   const { allProjects, selectedProjectsGraph } = await readProjects(process.cwd(), [])
   await execa('node', [

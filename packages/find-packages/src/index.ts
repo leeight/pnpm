@@ -1,6 +1,6 @@
 import path from 'path'
 import { readExactProjectManifest } from '@pnpm/read-project-manifest'
-import { ProjectManifest } from '@pnpm/types'
+import { Project } from '@pnpm/types'
 import fastGlob from 'fast-glob'
 import pFilter from 'p-filter'
 
@@ -15,13 +15,6 @@ export interface Options {
   ignore?: string[]
   includeRoot?: boolean
   patterns?: string[]
-}
-
-export interface Project {
-  dir: string
-  manifest: ProjectManifest
-
-  writeProjectManifest: (manifest: ProjectManifest, force?: boolean | undefined) => Promise<void>
 }
 
 export default async function findPkgs (root: string, opts?: Options): Promise<Project[]> {

@@ -5,6 +5,7 @@ import { readProjects } from '@pnpm/filter-workspace-packages'
 import { install } from '@pnpm/plugin-commands-installation'
 import { list, why } from '@pnpm/plugin-commands-listing'
 import prepare, { preparePackages } from '@pnpm/prepare'
+import { WORKSPACE_MANIFEST_FILENAME } from '@pnpm/constants'
 import { addDistTag } from '@pnpm/registry-mock'
 import stripAnsi from 'strip-ansi'
 import writeYamlFile from 'write-yaml-file'
@@ -93,7 +94,7 @@ test('recursive list with shared-workspace-lockfile', async () => {
     },
   ])
 
-  await writeYamlFile('pnpm-workspace.yaml', { packages: ['**', '!store/**'] })
+  await writeYamlFile(WORKSPACE_MANIFEST_FILENAME, { packages: ['**', '!store/**'] })
   await fs.writeFile('.npmrc', 'shared-workspace-lockfile = true', 'utf8')
 
   const { allProjects, selectedProjectsGraph } = await readProjects(process.cwd(), [])

@@ -2,6 +2,7 @@ import { promises as fs } from 'fs'
 import path from 'path'
 import { Lockfile } from '@pnpm/lockfile-types'
 import prepare, { preparePackages } from '@pnpm/prepare'
+import { WANTED_LOCKFILE, WORKSPACE_MANIFEST_FILENAME } from '@pnpm/constants'
 import readYamlFile from 'read-yaml-file'
 import writeYamlFile from 'write-yaml-file'
 import {
@@ -165,7 +166,7 @@ test('readPackage hook from pnpmfile at root of workspace', async () => {
   `
   await fs.writeFile('.pnpmfile.cjs', pnpmfile, 'utf8')
 
-  await writeYamlFile('pnpm-workspace.yaml', { packages: ['project-1'] })
+  await writeYamlFile(WORKSPACE_MANIFEST_FILENAME, { packages: ['project-1'] })
 
   const storeDir = path.resolve('store')
 
@@ -180,7 +181,7 @@ test('readPackage hook from pnpmfile at root of workspace', async () => {
 
   process.chdir('..')
 
-  const lockfile = await readYamlFile<Lockfile>('pnpm-lock.yaml')
+  const lockfile = await readYamlFile<Lockfile>(WANTED_LOCKFILE)
   /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
   expect(lockfile.packages!['/is-positive/1.0.0'].dependencies).toStrictEqual({
     'dep-of-pkg-with-1-dep': '100.1.0',
@@ -493,7 +494,7 @@ test('readPackage hook is used during removal inside a workspace', async () => {
     },
   ])
 
-  await writeYamlFile('pnpm-workspace.yaml', { packages: ['project-1'] })
+  await writeYamlFile(WORKSPACE_MANIFEST_FILENAME, { packages: ['project-1'] })
   await fs.writeFile('.pnpmfile.cjs', `
     'use strict'
     module.exports = {
@@ -515,6 +516,6 @@ test('readPackage hook is used during removal inside a workspace', async () => {
   await execPnpm(['uninstall', 'is-positive'])
 
   process.chdir('..')
-  const lockfile = await readYamlFile<Lockfile>('pnpm-lock.yaml')
+  const lockfile = await readYamlFile<Lockfile>(WANTED_LOCKFILE)
   expect(lockfile.packages!['/abc/1.0.0_is-negative@1.0.0+peer-a@1.0.0'].peerDependencies!['is-negative']).toBe('1.0.0')
 })

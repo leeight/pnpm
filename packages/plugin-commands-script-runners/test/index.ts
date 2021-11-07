@@ -10,6 +10,7 @@ import {
 } from '@pnpm/plugin-commands-script-runners'
 import prepare, { preparePackages } from '@pnpm/prepare'
 import { REGISTRY_MOCK_PORT } from '@pnpm/registry-mock'
+import { WORKSPACE_MANIFEST_FILENAME } from '@pnpm/constants'
 import execa from 'execa'
 import isWindows from 'is-windows'
 import writeYamlFile from 'write-yaml-file'
@@ -290,7 +291,7 @@ test('"pnpm run" prints the list of available commands, including commands of th
       },
     },
   ])
-  await writeYamlFile('pnpm-workspace.yaml', {})
+  await writeYamlFile(WORKSPACE_MANIFEST_FILENAME, {})
   const workspaceDir = process.cwd()
 
   const { allProjects, selectedProjectsGraph } = await readProjects(process.cwd(), [])
@@ -372,7 +373,7 @@ test('if a script is not found but is present in the root, print an info message
       version: '1.0.0',
     },
   ])
-  await writeYamlFile('pnpm-workspace.yaml', {})
+  await writeYamlFile(WORKSPACE_MANIFEST_FILENAME, {})
 
   await execa(pnpmBin, [
     'install',

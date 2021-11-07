@@ -4,7 +4,7 @@ import { addDependenciesToPackage } from '@pnpm/core'
 import { PackageFilesIndex } from '@pnpm/cafs'
 import { REGISTRY_MOCK_PORT } from '@pnpm/registry-mock'
 import { prepareEmpty } from '@pnpm/prepare'
-import { ENGINE_NAME } from '@pnpm/constants'
+import { ENGINE_NAME, WANTED_LOCKFILE } from '@pnpm/constants'
 import rimraf from '@zkochan/rimraf'
 import isWindows from 'is-windows'
 import loadJsonFile from 'load-json-file'
@@ -92,7 +92,7 @@ skipOnWindows('using side effects cache', async () => {
   await writeJsonFile(filesIndexFile, filesIndex)
 
   await rimraf('node_modules')
-  await rimraf('pnpm-lock.yaml') // to avoid headless install
+  await rimraf(WANTED_LOCKFILE) // to avoid headless install
   const opts2 = await testDefaults({
     fastUnpack: false,
     sideEffectsCacheRead: true,

@@ -4,6 +4,7 @@ import path from 'path'
 import getConfig from '@pnpm/config'
 import PnpmError from '@pnpm/error'
 import prepare, { prepareEmpty } from '@pnpm/prepare'
+import { WORKSPACE_MANIFEST_FILENAME } from '@pnpm/constants'
 
 import symlinkDir from 'symlink-dir'
 
@@ -144,7 +145,7 @@ test('when using --global, link-workspace-packages, shared-workspace-shrinwrap a
     'lockfile-directory=/home/src',
   ].join('\n')
   await fs.writeFile('.npmrc', npmrc, 'utf8')
-  await fs.writeFile('pnpm-workspace.yaml', '', 'utf8')
+  await fs.writeFile(WORKSPACE_MANIFEST_FILENAME, '', 'utf8')
 
   {
     const { config } = await getConfig({
@@ -222,7 +223,7 @@ test('filter is read from .npmrc as an array', async () => {
   prepareEmpty()
 
   await fs.writeFile('.npmrc', 'filter=foo bar...', 'utf8')
-  await fs.writeFile('pnpm-workspace.yaml', '', 'utf8')
+  await fs.writeFile(WORKSPACE_MANIFEST_FILENAME, '', 'utf8')
 
   const { config } = await getConfig({
     cliOptions: {
@@ -240,7 +241,7 @@ test('filter-prod is read from .npmrc as an array', async () => {
   prepareEmpty()
 
   await fs.writeFile('.npmrc', 'filter-prod=foo bar...', 'utf8')
-  await fs.writeFile('pnpm-workspace.yaml', '', 'utf8')
+  await fs.writeFile(WORKSPACE_MANIFEST_FILENAME, '', 'utf8')
 
   const { config } = await getConfig({
     cliOptions: {

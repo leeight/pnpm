@@ -1,6 +1,6 @@
 import path from 'path'
 import assertProject from '@pnpm/assert-project'
-import { LOCKFILE_VERSION } from '@pnpm/constants'
+import { LOCKFILE_VERSION, WANTED_LOCKFILE } from '@pnpm/constants'
 import { readCurrentLockfile } from '@pnpm/lockfile-file'
 import { prepareEmpty, preparePackages } from '@pnpm/prepare'
 import { ProjectManifest } from '@pnpm/types'
@@ -606,7 +606,7 @@ test('partial installation in a monorepo does not remove dependencies of other w
     },
   ], await testDefaults())
 
-  await writeYamlFile(path.resolve('pnpm-lock.yaml'), {
+  await writeYamlFile(path.resolve(WANTED_LOCKFILE), {
     importers: {
       'project-1': {
         dependencies: {
@@ -699,7 +699,7 @@ test('partial installation in a monorepo does not remove dependencies of other w
     },
   ], await testDefaults())
 
-  await writeYamlFile(path.resolve('pnpm-lock.yaml'), {
+  await writeYamlFile(path.resolve(WANTED_LOCKFILE), {
     importers: {
       'project-1': {
         dependencies: {

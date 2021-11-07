@@ -1,6 +1,7 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import { preparePackages } from '@pnpm/prepare'
+import { WORKSPACE_MANIFEST_FILENAME } from '@pnpm/constants'
 import writeYamlFile from 'write-yaml-file'
 import { execPnpm } from '../utils'
 
@@ -30,7 +31,7 @@ test('pnpm recursive run finds bins from the root of the workspace', async () =>
     },
   ])
 
-  await writeYamlFile('pnpm-workspace.yaml', { packages: ['**', '!store/**'] })
+  await writeYamlFile(WORKSPACE_MANIFEST_FILENAME, { packages: ['**', '!store/**'] })
 
   await execPnpm(['recursive', 'install'])
 

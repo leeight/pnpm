@@ -218,7 +218,7 @@ test('pnpm outdated: only current lockfile is available', async () => {
 test('pnpm outdated: only wanted lockfile is available', async () => {
   tempDir()
 
-  await fs.copyFile(path.join(hasOutdatedDepsFixture, 'pnpm-lock.yaml'), path.resolve('pnpm-lock.yaml'))
+  await fs.copyFile(path.join(hasOutdatedDepsFixture, WANTED_LOCKFILE), path.resolve(WANTED_LOCKFILE))
   await fs.copyFile(path.join(hasOutdatedDepsFixture, 'package.json'), path.resolve('package.json'))
 
   const { output, exitCode } = await outdated.handler({

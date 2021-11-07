@@ -1,6 +1,7 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import PnpmError from '@pnpm/error'
+import { WANTED_LOCKFILE, WORKSPACE_MANIFEST_FILENAME } from '@pnpm/constants'
 import { readProjects } from '@pnpm/filter-workspace-packages'
 import { Lockfile } from '@pnpm/lockfile-types'
 import { add, install, remove, update } from '@pnpm/plugin-commands-installation'
@@ -209,7 +210,7 @@ test('running `pnpm recursive` on a subset of packages', async () => {
     },
   ])
 
-  await writeYamlFile('pnpm-workspace.yaml', { packages: ['project-1'] })
+  await writeYamlFile(WORKSPACE_MANIFEST_FILENAME, { packages: ['project-1'] })
 
   await install.handler({
     ...DEFAULT_OPTS,
@@ -387,7 +388,7 @@ test('recursive --filter ignore excluded packages', async () => {
     },
   ])
 
-  await writeYamlFile('pnpm-workspace.yaml', {
+  await writeYamlFile(WORKSPACE_MANIFEST_FILENAME, {
     packages: [
       '**',
       '!project-1',
@@ -566,7 +567,7 @@ test('recursive install on workspace with custom lockfile-dir', async () => {
     workspaceDir: process.cwd(),
   })
 
-  const lockfile = await readYamlFile<Lockfile>(path.join(lockfileDir, 'pnpm-lock.yaml'))
+  const lockfile = await readYamlFile<Lockfile>(path.join(lockfileDir, WANTED_LOCKFILE))
   expect(Object.keys(lockfile.importers)).toStrictEqual(['../project-1', '../project-2'])
 })
 
@@ -640,6 +641,6 @@ test('prefer-workspace-package', async () => {
     workspaceDir: process.cwd(),
   })
 
-  const lockfile = await readYamlFile<Lockfile>(path.resolve('pnpm-lock.yaml'))
+  const lockfile = await readYamlFile<Lockfile>(path.resolve(WANTED_LOCKFILE))
   expect(lockfile.importers['project-1'].dependencies?.foo).toBe('link:../foo')
 })

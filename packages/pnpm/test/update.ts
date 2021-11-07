@@ -1,5 +1,6 @@
 import path from 'path'
 import prepare, { preparePackages } from '@pnpm/prepare'
+import { WANTED_LOCKFILE, WORKSPACE_MANIFEST_FILENAME } from '@pnpm/constants'
 import { fromDir as readPackage } from '@pnpm/read-package-json'
 import readYamlFile from 'read-yaml-file'
 import writeYamlFile from 'write-yaml-file'
@@ -79,10 +80,10 @@ test('recursive update --no-save', async () => {
     },
   ])
 
-  await writeYamlFile('pnpm-workspace.yaml', { packages: ['**', '!store/**'] })
+  await writeYamlFile(WORKSPACE_MANIFEST_FILENAME, { packages: ['**', '!store/**'] })
   await execPnpm(['recursive', 'update', '--no-save'])
 
-  const lockfile = await readYamlFile<any>('pnpm-lock.yaml') // eslint-disable-line
+  const lockfile = await readYamlFile<any>(WANTED_LOCKFILE) // eslint-disable-line
   expect(lockfile.packages).toHaveProperty(['/foo/100.1.0'])
 
   const pkg = await readPackage(path.resolve('project'))
@@ -102,10 +103,10 @@ test('recursive update', async () => {
     },
   ])
 
-  await writeYamlFile('pnpm-workspace.yaml', { packages: ['**', '!store/**'] })
+  await writeYamlFile(WORKSPACE_MANIFEST_FILENAME, { packages: ['**', '!store/**'] })
   await execPnpm(['recursive', 'update'])
 
-  const lockfile = await readYamlFile<any>('pnpm-lock.yaml') // eslint-disable-line
+  const lockfile = await readYamlFile<any>(WANTED_LOCKFILE) // eslint-disable-line
   expect(lockfile.packages).toHaveProperty(['/foo/100.1.0'])
 
   const pkg = await readPackage(path.resolve('project'))
@@ -127,7 +128,7 @@ test('recursive update --no-shared-workspace-lockfile', async function () {
     },
   ])
 
-  await writeYamlFile('pnpm-workspace.yaml', { packages: ['**', '!store/**'] })
+  await writeYamlFile(WORKSPACE_MANIFEST_FILENAME, { packages: ['**', '!store/**'] })
   await execPnpm(['recursive', 'update', '--no-shared-workspace-lockfile'])
 
   const lockfile = await projects['project'].readLockfile()
@@ -462,7 +463,7 @@ test('recursive update --latest on projects with a shared a lockfile', async () 
     },
   ])
 
-  await writeYamlFile('pnpm-workspace.yaml', { packages: ['**', '!store/**'] })
+  await writeYamlFile(WORKSPACE_MANIFEST_FILENAME, { packages: ['**', '!store/**'] })
   await execPnpm(['recursive', 'install'])
 
   await execPnpm(['recursive', 'update', '--latest'])
@@ -479,7 +480,7 @@ test('recursive update --latest on projects with a shared a lockfile', async () 
     foo: '100.1.0',
   })
 
-  const lockfile = await readYamlFile<any>('pnpm-lock.yaml') // eslint-disable-line
+  const lockfile = await readYamlFile<any>(WANTED_LOCKFILE) // eslint-disable-line
   expect(lockfile.importers['project-1'].dependencies['dep-of-pkg-with-1-dep']).toBe('101.0.0')
   expect(lockfile.importers['project-1'].dependencies['foo']).toBe('100.1.0')
   expect(lockfile.importers['project-2'].dependencies['bar']).toBe('100.1.0')
@@ -518,7 +519,7 @@ test('recursive update --latest --prod on projects with a shared a lockfile', as
     },
   ])
 
-  await writeYamlFile('pnpm-workspace.yaml', { packages: ['**', '!store/**'] })
+  await writeYamlFile(WORKSPACE_MANIFEST_FILENAME, { packages: ['**', '!store/**'] })
   await execPnpm(['recursive', 'install'])
 
   await execPnpm(['recursive', 'update', '--latest', '--prod'])
@@ -539,7 +540,7 @@ test('recursive update --latest --prod on projects with a shared a lockfile', as
     bar: '100.0.0',
   })
 
-  const lockfile = await readYamlFile<any>('pnpm-lock.yaml') // eslint-disable-line
+  const lockfile = await readYamlFile<any>(WANTED_LOCKFILE) // eslint-disable-line
   expect(lockfile.importers['project-1'].dependencies['dep-of-pkg-with-1-dep']).toBe('101.0.0')
   expect(lockfile.importers['project-1'].devDependencies['foo']).toBe('100.0.0')
   expect(lockfile.importers['project-2'].devDependencies['bar']).toBe('100.0.0')
@@ -581,7 +582,7 @@ test('recursive update --latest specific dependency on projects with a shared a 
     },
   ])
 
-  await writeYamlFile('pnpm-workspace.yaml', { packages: ['**', '!store/**'] })
+  await writeYamlFile(WORKSPACE_MANIFEST_FILENAME, { packages: ['**', '!store/**'] })
   await execPnpm(['recursive', 'install'])
 
   await execPnpm(['recursive', 'update', '--latest', 'foo', 'dep-of-pkg-with-1-dep@100.0.0', 'alias'])
@@ -599,7 +600,7 @@ test('recursive update --latest specific dependency on projects with a shared a 
     foo: '100.1.0',
   })
 
-  const lockfile = await readYamlFile<any>('pnpm-lock.yaml') // eslint-disable-line
+  const lockfile = await readYamlFile<any>(WANTED_LOCKFILE) // eslint-disable-line
   expect(lockfile.importers['project-1'].dependencies['dep-of-pkg-with-1-dep']).toBe('100.0.0')
   expect(lockfile.importers['project-1'].dependencies['foo']).toBe('100.1.0')
   expect(lockfile.importers['project-1'].dependencies['alias']).toBe('/qar/100.1.0')

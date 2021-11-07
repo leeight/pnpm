@@ -1,6 +1,6 @@
 import { promises as fs } from 'fs'
 import path from 'path'
-import { WANTED_LOCKFILE } from '@pnpm/constants'
+import { WANTED_LOCKFILE, WORKSPACE_MANIFEST_FILENAME } from '@pnpm/constants'
 import { Lockfile } from '@pnpm/lockfile-types'
 import prepare, { prepareEmpty, preparePackages } from '@pnpm/prepare'
 import { fromDir as readPackageJsonFromDir } from '@pnpm/read-package-json'
@@ -318,7 +318,7 @@ test('recursive install should fail if the used pnpm version does not satisfy th
     },
   ])
 
-  await fs.writeFile('pnpm-workspace.yaml', '', 'utf8')
+  await fs.writeFile(WORKSPACE_MANIFEST_FILENAME, '', 'utf8')
 
   process.chdir('project-1')
 
@@ -351,7 +351,7 @@ test('engine-strict=true: recursive install should fail if the used Node version
     },
   ])
 
-  await fs.writeFile('pnpm-workspace.yaml', '', 'utf8')
+  await fs.writeFile(WORKSPACE_MANIFEST_FILENAME, '', 'utf8')
 
   process.chdir('project-1')
 
@@ -384,7 +384,7 @@ test('engine-strict=false: recursive install should not fail if the used Node ve
     },
   ])
 
-  await fs.writeFile('pnpm-workspace.yaml', '', 'utf8')
+  await fs.writeFile(WORKSPACE_MANIFEST_FILENAME, '', 'utf8')
 
   process.chdir('project-1')
 

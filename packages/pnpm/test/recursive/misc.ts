@@ -1,6 +1,7 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import prepare, { preparePackages } from '@pnpm/prepare'
+import { WANTED_LOCKFILE, WORKSPACE_MANIFEST_FILENAME } from '@pnpm/constants'
 import { Lockfile } from '@pnpm/lockfile-types'
 import readYamlFile from 'read-yaml-file'
 import isCI from 'is-ci'
@@ -76,7 +77,7 @@ test('workspace .npmrc is always read', async () => {
   ])
 
   const storeDir = path.resolve('../store')
-  await fs.writeFile('pnpm-workspace.yaml', '', 'utf8')
+  await fs.writeFile(WORKSPACE_MANIFEST_FILENAME, '', 'utf8')
   await fs.writeFile('.npmrc', 'shamefully-flatten = true\nshared-workspace-lockfile=false', 'utf8')
   await fs.writeFile('project-2/.npmrc', 'hoist=false', 'utf8')
 
@@ -228,11 +229,11 @@ test('recursive installation of packages in workspace ignores hooks in packages'
     }
   `)
 
-  await writeYamlFile('pnpm-workspace.yaml', { packages: ['project-1', 'project-2'] })
+  await writeYamlFile(WORKSPACE_MANIFEST_FILENAME, { packages: ['project-1', 'project-2'] })
 
   await execPnpm(['recursive', 'install'])
 
-  const lockfile = await readYamlFile<Lockfile>('pnpm-lock.yaml')
+  const lockfile = await readYamlFile<Lockfile>(WANTED_LOCKFILE)
   /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
   expect(lockfile.packages).not.toHaveProperty(['/dep-of-pkg-with-1-dep/100.1.0'])
   expect(lockfile.packages).toHaveProperty(['/is-number/1.0.0'])
@@ -365,7 +366,7 @@ test('non-recursive install ignores filter from config', async () => {
 test('adding new dependency in the root should fail if neither --workspace-root nor --ignore-workspace-root-check are used', async () => {
   const project = prepare()
 
-  await fs.writeFile('pnpm-workspace.yaml', '', 'utf8')
+  await fs.writeFile(WORKSPACE_MANIFEST_FILENAME, '', 'utf8')
 
   {
     const { status, stdout } = execPnpmSync(['add', 'is-positive'])
@@ -431,7 +432,7 @@ test('--workspace-packages', async () => {
   ])
 
   const storeDir = path.resolve('../store')
-  await fs.writeFile('pnpm-workspace.yaml', '', 'utf8')
+  await fs.writeFile(WORKSPACE_MANIFEST_FILENAME, '', 'utf8')
 
   await execPnpm(['install', '--store-dir', storeDir, '--workspace-packages', 'project-1'])
 
@@ -465,7 +466,7 @@ test('set recursive-install to false in .npmrc would disable recursive install i
     },
   ])
 
-  await fs.writeFile('pnpm-workspace.yaml', '', 'utf8')
+  await fs.writeFile(WORKSPACE_MANIFEST_FILENAME, '', 'utf8')
   await fs.writeFile('.npmrc', 'recursive-install = false', 'utf8')
 
   process.chdir('project-1')
@@ -501,7 +502,7 @@ test('set recursive-install to false would install as --filter {.}...', async ()
     },
   ])
 
-  await fs.writeFile('pnpm-workspace.yaml', '', 'utf8')
+  await fs.writeFile(WORKSPACE_MANIFEST_FILENAME, '', 'utf8')
   await fs.writeFile('.npmrc', 'recursive-install = false', 'utf8')
 
   process.chdir('project-1')

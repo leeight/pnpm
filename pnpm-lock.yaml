@@ -894,10 +894,12 @@ importers:
 
   packages/find-workspace-dir:
     specifiers:
+      '@pnpm/constants': workspace:5.0.0
       '@pnpm/error': workspace:2.0.0
       '@pnpm/find-workspace-dir': 'link:'
       find-up: ^5.0.0
     dependencies:
+      '@pnpm/constants': link:../constants
       '@pnpm/error': link:../error
       find-up: 5.0.0
     devDependencies:
@@ -2310,6 +2312,7 @@ importers:
       '@pnpm/cli-utils': workspace:0.6.29
       '@pnpm/client': workspace:6.0.1
       '@pnpm/config': workspace:13.4.1
+      '@pnpm/constants': workspace:5.0.0
       '@pnpm/error': workspace:2.0.0
       '@pnpm/exportable-manifest': workspace:2.1.7
       '@pnpm/filter-workspace-packages': workspace:4.4.1
@@ -2352,6 +2355,7 @@ importers:
       '@pnpm/cli-utils': link:../cli-utils
       '@pnpm/client': link:../client
       '@pnpm/config': link:../config
+      '@pnpm/constants': link:../constants
       '@pnpm/error': link:../error
       '@pnpm/exportable-manifest': link:../exportable-manifest
       '@pnpm/lifecycle': link:../lifecycle
@@ -2485,6 +2489,7 @@ importers:
       '@pnpm/command': workspace:2.0.0
       '@pnpm/common-cli-options-help': workspace:0.7.1
       '@pnpm/config': workspace:13.4.1
+      '@pnpm/constants': workspace:5.0.0
       '@pnpm/error': workspace:2.0.0
       '@pnpm/filter-workspace-packages': workspace:4.4.1
       '@pnpm/lifecycle': workspace:12.0.0
@@ -2511,6 +2516,7 @@ importers:
       '@pnpm/command': link:../command
       '@pnpm/common-cli-options-help': link:../common-cli-options-help
       '@pnpm/config': link:../config
+      '@pnpm/constants': link:../constants
       '@pnpm/error': link:../error
       '@pnpm/lifecycle': link:../lifecycle
       '@pnpm/read-project-manifest': link:../read-project-manifest

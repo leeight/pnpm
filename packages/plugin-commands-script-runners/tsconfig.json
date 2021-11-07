@@ -25,6 +25,9 @@
       "path": "../config"
     },
     {
+      "path": "../constants"
+    },
+    {
       "path": "../error"
     },
     {

@@ -1,5 +1,6 @@
 import { promises as fs } from 'fs'
 import path from 'path'
+import { WORKSPACE_MANIFEST_FILENAME } from '@pnpm/constants'
 import { PackageManifest } from '@pnpm/types'
 import prepare, { preparePackages } from '@pnpm/prepare'
 import loadJsonFile from 'load-json-file'
@@ -61,7 +62,7 @@ test('readPackage hook in monorepo doesn\'t modify manifest', async () => {
       }
     `
   await fs.writeFile('.pnpmfile.cjs', pnpmfile, 'utf8')
-  await writeYamlFile('pnpm-workspace.yaml', { packages: ['**', '!store/**'] })
+  await writeYamlFile(WORKSPACE_MANIFEST_FILENAME, { packages: ['**', '!store/**'] })
 
   await execPnpm(['add', 'is-positive@1.0.0', '--filter', 'project-a'])
   let pkg: PackageManifest = await loadJsonFile(path.resolve('project-a/package.json'))

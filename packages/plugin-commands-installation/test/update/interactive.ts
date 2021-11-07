@@ -2,6 +2,7 @@ import path from 'path'
 import { readProjects } from '@pnpm/filter-workspace-packages'
 import { Lockfile } from '@pnpm/lockfile-types'
 import prepare, { preparePackages } from '@pnpm/prepare'
+import { WANTED_LOCKFILE } from '@pnpm/constants'
 import { REGISTRY_MOCK_PORT } from '@pnpm/registry-mock'
 import readYamlFile from 'read-yaml-file'
 import chalk from 'chalk'
@@ -212,7 +213,7 @@ test('interactive update of dev dependencies only', async () => {
     workspaceDir: process.cwd(),
   })
 
-  const lockfile = await readYamlFile<Lockfile>('pnpm-lock.yaml')
+  const lockfile = await readYamlFile<Lockfile>(WANTED_LOCKFILE)
 
   expect(
     Object.keys(lockfile.packages ?? {})

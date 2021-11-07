@@ -8,7 +8,7 @@ export async function readJson5File (filePath: string) {
   const text = await readFileWithoutBom(filePath)
   try {
     return {
-      data: JSON5.parse(text),
+      data: JSON5.parse(text) as ProjectManifest,
       text,
     }
   } catch (err: any) { // eslint-disable-line
@@ -26,6 +26,7 @@ export async function readJsonFile (filePath: string) {
       text,
     }
   } catch (err: any) { // eslint-disable-line
+    err.message = `${err.message as string} in ${filePath}`
     err['code'] = 'ERR_PNPM_JSON_PARSE'
     throw err
   }

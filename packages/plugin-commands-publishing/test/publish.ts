@@ -6,6 +6,7 @@ import isWindows from 'is-windows'
 import { pack, publish } from '@pnpm/plugin-commands-publishing'
 import prepare, { preparePackages } from '@pnpm/prepare'
 import { REGISTRY_MOCK_PORT } from '@pnpm/registry-mock'
+import { WORKSPACE_MANIFEST_FILENAME } from '@pnpm/constants'
 import exists from 'path-exists'
 import crossSpawn from 'cross-spawn'
 import writeYamlFile from 'write-yaml-file'
@@ -103,7 +104,7 @@ skipOnWindowsCI('pack packages with workspace LICENSE if no own LICENSE is prese
   ], { manifestFormat: 'YAML' })
 
   const workspaceDir = process.cwd()
-  await writeYamlFile('pnpm-workspace.yaml', { packages: ['**', '!store/**'] })
+  await writeYamlFile(WORKSPACE_MANIFEST_FILENAME, { packages: ['**', '!store/**'] })
   await fs.writeFile('LICENSE', 'workspace license', 'utf8')
   await fs.writeFile('project-2/LICENSE', 'project-2 license', 'utf8')
 
@@ -156,7 +157,7 @@ test('publish packages with workspace LICENSE if no own LICENSE is present', asy
   ], { manifestFormat: 'YAML' })
 
   const workspaceDir = process.cwd()
-  await writeYamlFile('pnpm-workspace.yaml', { packages: ['**', '!store/**'] })
+  await writeYamlFile(WORKSPACE_MANIFEST_FILENAME, { packages: ['**', '!store/**'] })
   await fs.writeFile('LICENSE', 'workspace license', 'utf8')
   await fs.writeFile('project-200/LICENSE', 'project-200 license', 'utf8')
 
@@ -381,7 +382,7 @@ test.skip('publish package that calls executable from the workspace .bin folder 
   ])
 
   const workspaceDir = process.cwd()
-  await writeYamlFile('pnpm-workspace.yaml', { packages: ['**', '!store/**'] })
+  await writeYamlFile(WORKSPACE_MANIFEST_FILENAME, { packages: ['**', '!store/**'] })
 
   process.chdir('test-publish-scripts')
   await publish.handler({
@@ -484,7 +485,7 @@ test('convert specs with workspace protocols to regular version ranges', async (
     },
   ])
 
-  await writeYamlFile('pnpm-workspace.yaml', { packages: ['**', '!store/**'] })
+  await writeYamlFile(WORKSPACE_MANIFEST_FILENAME, { packages: ['**', '!store/**'] })
 
   process.chdir('workspace-protocol-package')
 
@@ -588,7 +589,7 @@ test('convert specs with relative workspace protocols to regular version ranges'
     },
   ])
 
-  await writeYamlFile('pnpm-workspace.yaml', { packages: ['**', '!store/**'] })
+  await writeYamlFile(WORKSPACE_MANIFEST_FILENAME, { packages: ['**', '!store/**'] })
 
   process.chdir('relative-workspace-protocol-package')
 
